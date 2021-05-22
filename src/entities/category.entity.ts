@@ -1,5 +1,7 @@
 import { Category } from '@/interfaces/category.interface';
+import { Product } from '@/interfaces/product.interface';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { ProductEntity } from './product.entity';
 
 @Entity({ name: 'Categories' })
 export class CategoryEntity implements Category {
@@ -22,4 +24,7 @@ export class CategoryEntity implements Category {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => ProductEntity, product => product.category)
+  products: Product[];
 }
