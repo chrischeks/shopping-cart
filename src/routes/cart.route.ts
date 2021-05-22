@@ -17,6 +17,7 @@ class CartRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/add-to-cart`, authMiddleware, validationMiddleware(CartDto, 'body'), this.cartController.addToCart);
+    this.router.put(`${this.path}/update-cart`, authMiddleware, validationMiddleware(UpdateCartDto, 'body'), this.cartController.updateCartItem);
   }
 }
 

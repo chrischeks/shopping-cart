@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import UniversalService from './universal.service';
 import Status from '@/enums/status.enum';
-import { CartDto } from '@/dtos/cart.dto';
+import { CartDto, UpdateCartDto } from '@/dtos/cart.dto';
 import { ProductEntity } from '@/entities/product.entity';
 import { Product } from '@/interfaces/product.interface';
 import * as redis from 'redis';
@@ -39,6 +39,24 @@ class CartService extends UniversalService {
     userCart.push({ ...cartData, sellingPrice, totalPrice: quantity * sellingPrice, name, userId });
     await this.setUserCart(userId, userCart);
     return this.successResponse('Item added to cart successfully');
+  };
+
+  public updateCart = async (cartData: UpdateCartDto, userId: string) => {
+    const { productId, quantity, colour, size } = cartData;
+    const baseCartCheck = await this.baseCartCheck(productId, size, colour);
+    const { data, status } = baseCartCheck;
+    if (status === false) return baseCartCheck;
+    const { name, stockLevel, sellingPrice } = data;
+    const userCart: Cart[] | null = await this.getUserCart(userId);
+    const foundIndex = userCart.findIndex(item => item.productId == productId);
+    if (foundIndex === -1) return this.failureResponse(Status.PRECONDITION_FAILED, `${name} was not found in cart.`);
+    const cartItem = userCart[foundIndex];
+    const newQuantity = cartItem.quantity + (quantity || 0);
+
+    if (stockLevel < newQuantity) return this.failureResponse(Status.PRECONDITION_FAILED, `Only ${stockLevel} remaining.`);
+    userCart[foundIndex] = { ...cartItem, ...cartData, totalPrice: newQuantity * sellingPrice, quantity: newQuantity > 0 ? newQuantity : 0 };
+    await this.setUserCart(userId, userCart);
+    return this.successResponse('Item updated successfully');
   };
 
   private getUserCart = async (uniqueKey: string): Promise<Cart[] | null> => {

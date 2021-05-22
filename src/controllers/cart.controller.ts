@@ -19,6 +19,19 @@ class CartController extends UniversalController {
       next();
     }
   };
+
+  public updateCartItem = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { user, body } = req;
+      const userId: string = user.id;
+      const cartData: CartDto = body;
+      const response = await this.cartService.updateCart(cartData, userId);
+      await this.controllerResponseHandler(response, req, res);
+    } catch (error) {
+      await this.controllerErrorHandler(req, res, error);
+      next();
+    }
+  };
 }
 
 export default CartController;
