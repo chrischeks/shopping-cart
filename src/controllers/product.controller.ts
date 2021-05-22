@@ -17,6 +17,16 @@ class ProductController extends UniversalController {
       next();
     }
   };
+
+  public findAllProducts = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const response = await this.productService.findAllProducts();
+      await this.controllerResponseHandler(response, req, res);
+    } catch (error) {
+      await this.controllerErrorHandler(req, res, error);
+      next();
+    }
+  };
 }
 
 export default ProductController;

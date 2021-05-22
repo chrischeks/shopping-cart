@@ -28,6 +28,13 @@ class ProductService extends UniversalService {
     });
     return this.successResponse('Product created successfully.', createProductData);
   }
+
+  public async findAllProducts(): Promise<IResponse> {
+    const productRepository = getRepository(this.products);
+    const foundProduct: Product[] = await productRepository.find({ relations: ['category'] });
+
+    return this.successResponse('Products retrieved successfully.', foundProduct);
+  }
 }
 
 export default ProductService;

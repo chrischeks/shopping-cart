@@ -15,6 +15,7 @@ class ProductRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/create`, validationMiddleware(ProductDto, 'body'), this.productController.createProduct);
+    this.router.get(`${this.path}`, this.productController.findAllProducts);
   }
 }
 
