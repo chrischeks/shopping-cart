@@ -1,0 +1,10 @@
+{
+    "env": "default",
+    "dbConfig": {
+       "host": "localhost",
+        "user": "test",
+        "password": "CHEKWUBE1",
+        "database": "test_shopping_cart"
+    },
+    "secretKey": "secretKey"
+}
