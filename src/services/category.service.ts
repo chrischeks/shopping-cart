@@ -20,6 +20,13 @@ class CategoryService extends UniversalService {
     });
     return this.successResponse('Category created successfully', createUserData);
   }
+
+  public async findAllCategories(): Promise<IResponse> {
+    const categoryRepository = getRepository(this.categories);
+    const foundCategory: Category[] = await categoryRepository.find();
+
+    return this.successResponse('Categories retrieved successfully', foundCategory);
+  }
 }
 
 export default CategoryService;

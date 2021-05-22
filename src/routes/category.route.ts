@@ -15,6 +15,7 @@ class CategoryRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/create`, validationMiddleware(CategoryDto, 'body'), this.categoryController.createCategory);
+    this.router.get(`${this.path}`, this.categoryController.findAllCategories);
   }
 }
 
