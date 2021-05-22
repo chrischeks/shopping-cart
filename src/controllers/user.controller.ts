@@ -14,6 +14,16 @@ class UsersController extends UniversalController {
       next();
     }
   };
+
+  public findAllUsers = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const response = await this.userService.findAllUsers();
+      await this.controllerResponseHandler(response, req, res);
+    } catch (error) {
+      await this.controllerErrorHandler(req, res, error);
+      next();
+    }
+  };
 }
 
 export default UsersController;

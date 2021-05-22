@@ -4,6 +4,7 @@ import Route from '@interfaces/route.interface';
 import authMiddleware from '@/middlewares/auth.middleware';
 
 class UsersRoute implements Route {
+  public usersPath = '/users';
   public userPath = '/user';
 
   public router = Router();
@@ -15,6 +16,7 @@ class UsersRoute implements Route {
 
   private initializeRoutes() {
     this.router.get(`${this.userPath}`, authMiddleware, this.usersController.getUserById);
+    this.router.get(`${this.usersPath}`, authMiddleware, this.usersController.findAllUsers);
   }
 }
 
