@@ -17,7 +17,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
       const userId = verificationResponse.id;
 
       const userRepository = getRepository(UserEntity);
-      const foundUser = await userRepository.findOne(userId, { select: ['id', 'firstName', 'lastName'] });
+      const foundUser = await userRepository.findOne(userId, { select: ['id', 'firstName', 'lastName', 'role'] });
       if (foundUser) {
         req.user = foundUser;
         next();

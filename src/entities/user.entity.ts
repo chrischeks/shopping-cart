@@ -18,7 +18,7 @@ export class UserEntity implements User {
   @Column()
   password: string;
 
-  @Column({ type: 'varchar', length: '6', default: 'user' })
+  @Column({ type: 'varchar', length: '50', default: 'user' })
   role: string;
 
   @Column()

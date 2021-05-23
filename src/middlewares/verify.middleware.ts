@@ -17,11 +17,7 @@ const verifyKey = async (req: Request, res: Response, next: NextFunction): Promi
 
   const text = `${API_KEY}|${headerTimestamp}`;
   const hash = crypto.createHash('sha512', API_KEY).update(text).digest('hex');
-  console.log(hash, 'hash');
-
   const timeDiff = Date.now() - headerTimestamp;
-  console.log(timeDiff, headerTimestamp, Date.now(), 'headerTimestamp');
-
   if (hash !== key || timeDiff > 300000) {
     return await controller.controllerResponseHandler(invalidAuth, req, res);
   }
