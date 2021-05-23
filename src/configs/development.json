@@ -6,5 +6,6 @@
   "password": "CHRISTOk@1",
   "database": "shopping_cart"
     },
-    "secretKey": "secretKey"
+    "secretKey": "secretKey",
+    "api_key":"thisisadevelopmentapikey,thiskeyisfortesttheoneforproductionwon'tbecommittedtotherepository"
 }
