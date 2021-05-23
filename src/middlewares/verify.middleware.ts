@@ -4,21 +4,26 @@ import UniversalController from '@/controllers/universal.controller';
 import config from 'config';
 
 const verifyKey = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  const invalidAuth = { message: 'Invalid authentication..', status: false, statusCode: 401 };
   const controller = new UniversalController();
 
   const key = req.headers['x-api-key'];
   const headerTimestamp = Number(req.headers['x-timestamp']);
 
   if (!key || !headerTimestamp) {
-    return await controller.controllerResponseHandler({ message: 'Invalid authentication..', status: false, statusCode: 401 }, req, res);
+    return await controller.controllerResponseHandler(invalidAuth, req, res);
   }
   const API_KEY = config.get('api_key');
 
   const text = `${API_KEY}|${headerTimestamp}`;
   const hash = crypto.createHash('sha512', API_KEY).update(text).digest('hex');
+  console.log(hash, 'hash');
 
-  if (hash !== key) {
-    return await controller.controllerResponseHandler({ message: 'Invalid authentication..', status: false, statusCode: 401 }, req, res);
+  const timeDiff = Date.now() - headerTimestamp;
+  console.log(timeDiff, headerTimestamp, Date.now(), 'headerTimestamp');
+
+  if (hash !== key || timeDiff > 300000) {
+    return await controller.controllerResponseHandler(invalidAuth, req, res);
   }
   next();
 };

@@ -7,6 +7,7 @@ import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
 import UniversalController from '@/controllers/universal.controller';
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  const auth = { status: false, statusCode: 401 };
   const controller = new UniversalController();
   try {
     const Authorization = req.cookies['Authorization'] || req.header('Authorization')?.split('Bearer ')[1] || null;
@@ -21,13 +22,13 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
         req.user = foundUser;
         next();
       } else {
-        await controller.controllerResponseHandler({ message: 'Wrong authentication token.', status: false, statusCode: 401 }, req, res);
+        await controller.controllerResponseHandler({ ...auth, message: 'Wrong authentication token.' }, req, res);
       }
     } else {
-      await controller.controllerResponseHandler({ message: 'Authentication token missing.', status: false, statusCode: 401 }, req, res);
+      await controller.controllerResponseHandler({ ...auth, message: 'Authentication token missing.' }, req, res);
     }
   } catch (error) {
-    await controller.controllerResponseHandler({ message: 'Wrong/expired authentication token.', status: false, statusCode: 401 }, req, res);
+    await controller.controllerResponseHandler({ ...auth, message: 'Wrong/expired authentication token.' }, req, res);
   }
 };
 
