@@ -46,7 +46,7 @@ class AuthService extends UniversalService {
   public async createToken(user: User): Promise<TokenData> {
     const dataStoredInToken: DataStoredInToken = { id: user.id };
     const secretKey: string = config.get('secretKey');
-    const expiresIn: number = 24 * 60 * 60;
+    const expiresIn: string = '1d';
 
     return { expiresIn, token: jwt.sign(dataStoredInToken, secretKey, { expiresIn }) };
   }

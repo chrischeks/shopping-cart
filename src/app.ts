@@ -13,6 +13,7 @@ import Routes from '@interfaces/route.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import { dbConnection } from './databases';
+import notFound from './middlewares/not-found.middleware';
 
 class App {
   public app: express.Application;
@@ -28,6 +29,7 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
+    this.initializeRouteNotFound();
   }
 
   public listen() {
@@ -74,6 +76,9 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+  private initializeRouteNotFound() {
+    this.app.use(notFound);
   }
 }
 
