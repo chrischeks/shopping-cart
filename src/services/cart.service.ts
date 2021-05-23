@@ -6,6 +6,7 @@ import { ProductEntity } from '@/entities/product.entity';
 import { Product } from '@/interfaces/product.interface';
 import * as redis from 'redis';
 import { Cart } from '@/interfaces/cart.interface';
+import IResponse from '@/interfaces/response.interface';
 
 const client = redis.createClient();
 
@@ -71,6 +72,13 @@ class CartService extends UniversalService {
     userCart.splice(foundIndex, 1);
     await this.setUserCart(userId, userCart);
     return this.successResponse('Item removed from cart successfully');
+  };
+
+  public userCart = async (userId: string): Promise<IResponse> => {
+    const userCart: Cart[] | null = await this.getUserCart(userId);
+
+    if (!userCart) return this.successResponse('No item in cart', null, Status.SUCCESS_NO_CONTENT);
+    return this.successResponse('Cart retrieved successfully', userCart);
   };
 
   private getUserCart = async (uniqueKey: string): Promise<Cart[] | null> => {

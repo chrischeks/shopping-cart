@@ -24,6 +24,7 @@ class CartRoute implements Route {
       validationMiddleware(BaseCartDTO, 'params'),
       this.cartController.removeCartItem,
     );
+    this.router.get(`${this.path}`, authMiddleware, this.cartController.userCart);
   }
 }
 

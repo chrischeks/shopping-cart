@@ -45,6 +45,17 @@ class CartController extends UniversalController {
       next();
     }
   };
+
+  public userCart = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId: string = req.user.id;
+      const response = await this.cartService.userCart(userId);
+      await this.controllerResponseHandler(response, req, res);
+    } catch (error) {
+      await this.controllerErrorHandler(req, res, error);
+      next();
+    }
+  };
 }
 
 export default CartController;
