@@ -9,9 +9,11 @@ import Status from '@/enums/status.enum';
 class UserService extends UniversalService {
   public users = UserEntity;
 
-  public async findAllUsers(): Promise<IResponse> {
+  public async findAllUsers(query): Promise<IResponse> {
+    const take = query.take || 10;
+    const skip = query.skip || 0;
     const userRepository = getRepository(this.users);
-    const findUser: User[] = await userRepository.find();
+    const findUser: User[] = await userRepository.find({ order: { createdAt: 'DESC' }, take, skip });
     return this.successResponse('success', findUser, Status.SUCCESS);
   }
 }
