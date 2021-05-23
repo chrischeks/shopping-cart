@@ -59,6 +59,20 @@ class CartService extends UniversalService {
     return this.successResponse('Item updated successfully');
   };
 
+  public removeCartItem = async (productId: string, userId: string) => {
+    const checkPassed = await this.baseCartCheck(productId);
+    const { data, status } = checkPassed;
+    if (status === false) return checkPassed;
+    const { name } = data;
+    const userCart: Cart[] | null = await this.getUserCart(userId);
+
+    const foundIndex = userCart.findIndex(item => item.productId == productId);
+    if (foundIndex === -1) return this.failureResponse(Status.PRECONDITION_FAILED, `${name} was not found in cart.`);
+    userCart.splice(foundIndex, 1);
+    await this.setUserCart(userId, userCart);
+    return this.successResponse('Item removed from cart successfully');
+  };
+
   private getUserCart = async (uniqueKey: string): Promise<Cart[] | null> => {
     return new Promise((resolve, reject) => {
       client.get(uniqueKey, async (error, cart) => {
