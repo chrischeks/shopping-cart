@@ -3,6 +3,7 @@ import Route from '@interfaces/route.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import ProductController from '@/controllers/product.controller';
 import { ProductDto } from '@/dtos/product.dto';
+import verifyKey from '@/middlewares/verify.middleware';
 
 class ProductRoute implements Route {
   public path = '/products';
@@ -14,8 +15,8 @@ class ProductRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, validationMiddleware(ProductDto, 'body'), this.productController.createProduct);
-    this.router.get(`${this.path}`, this.productController.findAllProducts);
+    this.router.post(`${this.path}/create`, verifyKey, validationMiddleware(ProductDto, 'body'), this.productController.createProduct);
+    this.router.get(`${this.path}`, verifyKey, this.productController.findAllProducts);
   }
 }
 
