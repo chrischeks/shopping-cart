@@ -3,6 +3,7 @@ import Route from '@interfaces/route.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { CategoryDto } from '@/dtos/category.dto';
 import CategoryController from '@/controllers/category.controller';
+import verifyKey from '@/middlewares/verify.middleware';
 
 class CategoryRoute implements Route {
   public path = '/product-category';
@@ -14,8 +15,8 @@ class CategoryRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, validationMiddleware(CategoryDto, 'body'), this.categoryController.createCategory);
-    this.router.get(`${this.path}`, this.categoryController.findAllCategories);
+    this.router.post(`${this.path}/create`, verifyKey, validationMiddleware(CategoryDto, 'body'), this.categoryController.createCategory);
+    this.router.get(`${this.path}`, verifyKey, this.categoryController.findAllCategories);
   }
 }
 
