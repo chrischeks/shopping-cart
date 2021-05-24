@@ -27,8 +27,8 @@ afterAll(async () => {
 
 describe('Testing User', () => {
   const baseData = {
-    mobileNumber: '08100000000',
-    password: 'q1w2e3r4!Q',
+    mobileNumber: '08100000002',
+    password: 'q1w2e3r4!L',
   };
   const date = new Date();
   describe('[GET] /user', () => {

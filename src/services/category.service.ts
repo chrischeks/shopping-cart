@@ -19,7 +19,7 @@ class CategoryService extends UniversalService {
       ...categoryData,
       name,
     });
-    return this.successResponse('Category created successfully', createUserData);
+    return this.successResponse('Category created successfully', createUserData, Status.CREATED);
   }
 
   public async findAllCategories(query: PaginationDto): Promise<IResponse> {

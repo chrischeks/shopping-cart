@@ -37,8 +37,6 @@ class AuthService extends UniversalService {
     if (!isPasswordMatching) return this.failureResponse(Status.FAILED_VALIDATION, 'Invalid mobile number or password');
 
     const tokenData = await this.createToken(foundUser);
-    console.log(tokenData, 'tokenData');
-
     const cookie = this.createCookie(tokenData);
     return this.successResponse('Login successful', { cookie, foundUser });
   }

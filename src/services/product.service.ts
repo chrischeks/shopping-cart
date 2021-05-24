@@ -20,7 +20,7 @@ class ProductService extends UniversalService {
     const name: string = productData.name.toLowerCase();
     const foundCategory: Category = await categoryRepository.findOne(categoryId);
 
-    if (!foundCategory) return this.failureResponse(Status.FAILED_VALIDATION, `Chosen category does not exists.`);
+    if (!foundCategory) return this.failureResponse(Status.PRECONDITION_FAILED, `Chosen category does not exists.`);
     const product = await productRepository.findOne({ where: { name } });
     if (product) return this.failureResponse(Status.CONFLICT, `${name} already exists.`);
     const data: Product = { ...productData, colours: JSON.stringify(colours), sizes: JSON.stringify(sizes) };

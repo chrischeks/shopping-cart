@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import UniversalService from './universal.service';
 import Status from '@/enums/status.enum';
-import { CartDto, UpdateCartDto } from '@/dtos/cart.dto';
+import { CartDTO, BaseCartDTO, UpdateCartDTO } from '@/dtos/cart.dto';
 import { ProductEntity } from '@/entities/product.entity';
 import { Product } from '@/interfaces/product.interface';
 import * as redis from 'redis';
@@ -23,7 +23,7 @@ class CartService extends UniversalService {
     return this.successResponse('success', foundProduct);
   };
 
-  public addItemToCart = async (cartData: CartDto, userId: string) => {
+  public addItemToCart = async (cartData: CartDTO, userId: string) => {
     const { quantity, colour, size, productId } = cartData;
     const checkPassed = await this.baseCartCheck(productId, size, colour);
     const { data, status } = checkPassed;
@@ -42,7 +42,7 @@ class CartService extends UniversalService {
     return this.successResponse('Item added to cart successfully');
   };
 
-  public updateCart = async (cartData: UpdateCartDto, userId: string) => {
+  public updateCart = async (cartData: UpdateCartDTO, userId: string) => {
     const { productId, quantity, colour, size } = cartData;
     const baseCartCheck = await this.baseCartCheck(productId, size, colour);
     const { data, status } = baseCartCheck;

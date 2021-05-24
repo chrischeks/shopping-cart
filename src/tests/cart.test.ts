@@ -6,7 +6,7 @@ import { CreateUserDto } from '@dtos/user.dto';
 import AuthRoute from '@routes/auth.route';
 import IResponse from '@/interfaces/response.interface';
 import CartRoute from '@/routes/cart.route';
-import { CartDto } from '@/dtos/cart.dto';
+import { CartDTO } from '@/dtos/cart.dto';
 import { Product } from '@/interfaces/product.interface';
 import crypto from 'crypto';
 import config from 'config';
@@ -19,8 +19,8 @@ const baseData = {
 
 const userData: CreateUserDto = {
   ...baseData,
-  firstName: 'test_firstname',
-  lastName: 'test_lastname',
+  firstName: 'test1_firstname',
+  lastName: 'test1_lastname',
 };
 
 const cartRoute = new CartRoute();
@@ -81,7 +81,7 @@ describe('Testing Cart', () => {
 
   describe('[POST] /cart', () => {
     it('should successfully add a product to cart', async () => {
-      const cartData: CartDto = {
+      const cartData: CartDTO = {
         quantity: 10,
         productId: 'ae2c8e33-df9f-4a7f-8dd6-b6e096f10748',
         colour: 'white',
@@ -104,7 +104,7 @@ describe('Testing Cart', () => {
     });
 
     it('should return precondition failed (412) when product does not have the specified colour', async () => {
-      const cartData: CartDto = {
+      const cartData: CartDTO = {
         quantity: 10,
         productId: 'ae2c8e33-df9f-4a7f-8dd6-b6e096f10748',
         colour: 'purple',
@@ -127,7 +127,7 @@ describe('Testing Cart', () => {
     });
 
     it('should return precondition failed (412) when product does not have the specified size', async () => {
-      const cartData: CartDto = {
+      const cartData: CartDTO = {
         quantity: 10,
         productId: 'ae2c8e33-df9f-4a7f-8dd6-b6e096f10748',
         colour: 'white',
@@ -150,7 +150,7 @@ describe('Testing Cart', () => {
     });
 
     it('should return precondition failed (412) if the cart quantity is greater than the stock level ', async () => {
-      const cartData: CartDto = {
+      const cartData: CartDTO = {
         quantity: 1000,
         productId: 'ae2c8e33-df9f-4a7f-8dd6-b6e096f10748',
         colour: 'white',
@@ -172,32 +172,10 @@ describe('Testing Cart', () => {
         });
     });
 
-    it('should return failed validation (400) if size is omitted ', async () => {
+    it('should return precondition failed (412) if productId is omitted ', async () => {
       const cartData = {
         quantity: 10,
-        productId: 'ae2c8e33-df9f-4a7f-8dd6-b6e096f10748',
         colour: 'white',
-      };
-      const productRepository = getRepository(product);
-      productRepository.findOne = jest.fn().mockReturnValue(productData);
-
-      return await appRequest
-        .post(`${basePath}${cartRoute.path}/add-to-cart`)
-        .set('x-api-key', key)
-        .set('x-timestamp', timestamp)
-        .set('Authorization', `Bearer ${bearerToken}`)
-        .send(cartData)
-        .then(result => {
-          const { body, status } = result;
-          expect(status).toBe(400);
-          expect(body.message).toBe(`size must be a string,size should not be empty`);
-        });
-    });
-
-    it('should return failed validation (400) if colour omitted ', async () => {
-      const cartData = {
-        quantity: 10,
-        productId: 'ae2c8e33-df9f-4a7f-8dd6-b6e096f10748',
         size: 'l',
       };
       const productRepository = getRepository(product);
@@ -212,7 +190,7 @@ describe('Testing Cart', () => {
         .then(result => {
           const { body, status } = result;
           expect(status).toBe(400);
-          expect(body.message).toBe(`colour must be a string,colour should not be empty`);
+          expect(body.message).toBe(`productId must be a UUID,productId should not be empty`);
         });
     });
   });
@@ -302,8 +280,8 @@ describe('Testing Cart', () => {
     });
   });
 
-  describe('[GET] /update-cart', () => {
-    it('should successfully list items in a cart', async () => {
+  describe('[GET] /', () => {
+    it('should successfully list items in user cart', async () => {
       const productRepository = getRepository(product);
       productRepository.findOne = jest.fn().mockReturnValue(productData);
 

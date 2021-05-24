@@ -3,7 +3,7 @@ import Route from '@interfaces/route.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import CartController from '@/controllers/cart.controller';
 import authMiddleware from '@/middlewares/auth.middleware';
-import { BaseCartDTO, CartDto, UpdateCartDto } from '@/dtos/cart.dto';
+import { BaseCartDTO, CartDTO, UpdateCartDTO } from '@/dtos/cart.dto';
 import verifyKey from '@/middlewares/verify.middleware';
 
 class CartRoute implements Route {
@@ -16,12 +16,12 @@ class CartRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/add-to-cart`, verifyKey, authMiddleware, validationMiddleware(CartDto, 'body'), this.cartController.addToCart);
+    this.router.post(`${this.path}/add-to-cart`, verifyKey, authMiddleware, validationMiddleware(CartDTO, 'body'), this.cartController.addToCart);
     this.router.put(
       `${this.path}/update-cart`,
       verifyKey,
       authMiddleware,
-      validationMiddleware(UpdateCartDto, 'body'),
+      validationMiddleware(UpdateCartDTO, 'body'),
       this.cartController.updateCartItem,
     );
     this.router.delete(
