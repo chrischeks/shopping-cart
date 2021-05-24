@@ -7,6 +7,7 @@ import { ProductDto } from '@/dtos/product.dto';
 import { Product } from '@/interfaces/product.interface';
 import { Category } from '@/interfaces/category.interface';
 import { CategoryEntity } from '@/entities/category.entity';
+import { PaginationDto } from '@/dtos/pagination.dto';
 
 class ProductService extends UniversalService {
   public products = ProductEntity;
@@ -25,13 +26,16 @@ class ProductService extends UniversalService {
     const data: Product = { ...productData, colours: JSON.stringify(colours), sizes: JSON.stringify(sizes) };
     const createProductData: Product = await productRepository.save({
       ...data,
+      category: foundCategory,
     });
     return this.successResponse('Product created successfully.', createProductData);
   }
 
-  public async findAllProducts(): Promise<IResponse> {
+  public async findAllProducts(query: PaginationDto): Promise<IResponse> {
+    const { take = 10, skip = 0 } = query;
+
     const productRepository = getRepository(this.products);
-    const foundProduct: Product[] = await productRepository.find({ relations: ['category'] });
+    const foundProduct: Product[] = await productRepository.find({ relations: ['category'], order: { createdAt: 'DESC' }, take, skip });
 
     return this.successResponse('Products retrieved successfully.', foundProduct);
   }

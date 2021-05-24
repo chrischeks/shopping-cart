@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import userService from '@/services/user.service';
 import UniversalController from './universal.controller';
 import { RequestWithUser } from '@/interfaces/auth.interface';
@@ -15,9 +15,10 @@ class UsersController extends UniversalController {
     }
   };
 
-  public findAllUsers = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public findAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const response = await this.userService.findAllUsers(req.query);
+      const userData: any = req.query;
+      const response = await this.userService.findAllUsers(userData);
       await this.controllerResponseHandler(response, req, res);
     } catch (error) {
       await this.controllerErrorHandler(req, res, error);
