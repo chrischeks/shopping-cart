@@ -1,0 +1,11 @@
+{
+    "env": "development",
+    "dbConfig": {
+    "host": "localhost",
+  "user": "root",
+  "password": "CHRISTOk@1",
+  "database": "shopping_cart"
+    },
+    "secretKey": "secretKey",
+    "api_key":"thisisadevelopmentapikey,thiskeyisfortesttheoneforproductionwon'tbecommittedtotherepository"
+}
